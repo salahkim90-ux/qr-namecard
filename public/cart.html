@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>명함발주시스템 - 장바구니</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/common.css">
+  <style>
+    /* ── Cart Page Layout ── */
+    .cart-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: var(--space-lg);
+      padding-top: var(--space-md);
+    }
+
+    /* ── Cart Table Card ── */
+    .cart-card {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .cart-card-header {
+      background: var(--bg);
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-card-header-title {
+      font-size: var(--font-md);
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .cart-card-body {
+      padding: 0;
+    }
+
+    /* ── Cart Table ── */
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--font-base);
+    }
+
+    .cart-table th,
+    .cart-table td {
+      padding: 12px 16px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .cart-table th {
+      font-size: var(--font-sm);
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg);
+      white-space: nowrap;
+    }
+
+    .cart-table tbody tr:hover {
+      background: var(--accent-glow);
+    }
+
+    .cart-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .cart-table .col-checkbox { width: 50px; }
+    .cart-table .col-no       { width: 60px; }
+    .cart-table .col-type     { width: 120px; }
+    .cart-table .col-qty      { width: 80px; }
+    .cart-table .col-price    { width: 120px; }
+    .cart-table .col-action   { width: 80px; }
+
+    .cart-table .price-cell {
+      font-weight: 600;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .cart-table .btn-delete {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      padding: 4px 12px;
+      font-size: var(--font-sm);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 500;
+      transition: all var(--transition-base);
+    }
+
+    .cart-table .btn-delete:hover {
+      background: var(--danger);
+      color: var(--text-inverse);
+    }
+
+    /* ── Empty State ── */
+    .cart-empty {
+      text-align: center;
+      padding: var(--space-2xl) var(--space-lg);
+      color: var(--text-muted);
+    }
+
+    .cart-empty-icon {
+      font-size: 48px;
+      margin-bottom: var(--space-md);
+      opacity: 0.4;
+    }
+
+    .cart-empty-text {
+      font-size: var(--font-md);
+      margin-bottom: var(--space-sm);
+    }
+
+    .cart-empty-sub {
+      font-size: var(--font-sm);
+    }
+
+    /* ── Cart Summary ── */
+    .cart-summary {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-lg) var(--space-xl);
+      margin-top: var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+    }
+
+    .cart-total {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-sm);
+    }
+
+    .cart-total-label {
+      font-size: var(--font-md);
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .cart-total-value {
+      font-size: var(--font-2xl);
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .cart-actions {
+      display: flex;
+      gap: var(--space-md);
+    }
+
+    .cart-actions .btn {
+      min-width: 140px;
+    }
+
+    /* ── Select All ── */
+    .select-all-wrap {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: var(--font-sm);
+      color: var(--text-secondary);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .cart-page {
+        padding: var(--space-md);
+      }
+
+      .cart-summary {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+
+      .cart-total {
+        justify-content: center;
+      }
+
+      .cart-actions {
+        flex-direction: column;
+      }
+
+      .cart-actions .btn {
+        width: 100%;
+      }
+
+      .cart-table {
+        font-size: var(--font-sm);
+      }
+
+      .cart-table th,
+      .cart-table td {
+        padding: 10px 8px;
+      }
+
+      .cart-card-body {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="/" class="header-logo">
+          <span class="logo-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </span>
+          <span class="logo-text">명함발주시스템</span>
+        </a>
+      </div>
+      <nav class="header-right">
+        <span class="header-user" id="headerUser">홍길동님</span>
+        <a href="/order.html" class="header-link">명함주문</a>
+        <a href="/mypage" class="header-link">마이페이지</a>
+        <button type="button" class="header-link btn-logout" id="btnLogout">로그아웃</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Main Content ===== -->
+  <main class="main-content cart-page">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="현재 위치">
+      <ol>
+        <li><a href="/">홈</a></li>
+        <li aria-current="page"><span>장바구니</span></li>
+      </ol>
+    </nav>
+
+    <!-- Page Title -->
+    <h1 class="page-title">장바구니</h1>
+
+    <!-- Cart Table -->
+    <div class="cart-card">
+      <div class="cart-card-header">
+        <span class="cart-card-header-title">주문 목록</span>
+        <label class="select-all-wrap">
+          <input type="checkbox" id="checkAll"> 전체선택
+        </label>
+      </div>
+      <div class="cart-card-body">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th class="col-checkbox">선택</th>
+              <th class="col-no">번호</th>
+              <th class="col-type">명함유형</th>
+              <th>이름</th>
+              <th>부서</th>
+              <th class="col-qty">수량</th>
+              <th class="col-price">금액</th>
+              <th class="col-action">삭제</th>
+            </tr>
+          </thead>
+          <tbody id="cartBody">
+            <!-- Rendered by app-cart.js -->
+          </tbody>
+        </table>
+
+        <!-- Empty State (hidden by default, shown by JS) -->
+        <div class="cart-empty d-none" id="cartEmpty">
+          <div class="cart-empty-icon">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="9" cy="21" r="1"/>
+              <circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+          </div>
+          <p class="cart-empty-text">장바구니가 비어 있습니다</p>
+          <p class="cart-empty-sub">명함주문 페이지에서 주문을 추가해주세요.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="cart-summary" id="cartSummary">
+      <div class="cart-total">
+        <span class="cart-total-label">총 주문금액:</span>
+        <span class="cart-total-value">&won;<span id="cartTotal">0</span></span>
+      </div>
+      <div class="cart-actions">
+        <a href="/order.html" class="btn btn-secondary">계속 주문하기</a>
+        <button type="button" class="btn btn-primary btn-lg" id="btnConfirmOrder">주문확정</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-text">&copy; 2026 명함발주시스템. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ===== Toast ===== -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== Scripts ===== -->
+  <script src="js/common.js"></script>
+  <script src="js/app-cart.js"></script>
+
+</body>
+</html>

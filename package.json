@@ -1,0 +1,34 @@
+{
+  "name": "qr-namecard",
+  "version": "1.0.0",
+  "description": "QR 코드 기반 명함 발주 시스템 — 실시간 미리보기, vCard QR 생성, 대량 발주 지원",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "keywords": [
+    "namecard",
+    "business-card",
+    "qr-code",
+    "vcard",
+    "express",
+    "sqlite",
+    "canvas"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "multer": "^2.0.2",
+    "qrcode": "^1.5.4",
+    "sharp": "^0.34.5",
+    "xlsx": "^0.18.5"
+  }
+}

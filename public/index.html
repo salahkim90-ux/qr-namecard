@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>명함발주시스템 - 로그인</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/common.css">
+  <style>
+    /* Login page specific layout */
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 420px;
+      animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    /* Card header (gradient) */
+    .login-header {
+      background: var(--gradient-primary);
+      padding: 36px 28px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-header::before {
+      content: '';
+      position: absolute;
+      top: -40%; right: -20%;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .login-header::after {
+      content: '';
+      position: absolute;
+      bottom: -60%; left: -10%;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(0,168,232,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-logo-icon {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .login-logo-icon svg {
+      width: 20px; height: 20px;
+      fill: white;
+    }
+
+    .login-logo-text {
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .login-title-area {
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+
+    .login-subtitle {
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    /* Card body (form area) */
+    .login-body {
+      padding: 28px;
+    }
+
+    .login-body .form-group {
+      margin-bottom: var(--space-lg);
+    }
+
+    .login-body .form-group:last-of-type {
+      margin-bottom: var(--space-xl);
+    }
+
+    .login-body .form-input {
+      padding: 12px 14px;
+      font-size: var(--font-md);
+    }
+
+    /* Error message */
+    .login-error {
+      display: none;
+      padding: 10px 14px;
+      background: rgba(198, 40, 40, 0.08);
+      border: 1px solid rgba(198, 40, 40, 0.2);
+      border-radius: var(--radius-md);
+      color: var(--danger);
+      font-size: var(--font-sm);
+      font-weight: 500;
+      margin-bottom: var(--space-lg);
+      text-align: center;
+    }
+
+    .login-error.show {
+      display: block;
+    }
+
+    /* Login button */
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      font-size: var(--font-md);
+    }
+
+    /* Footer inside card */
+    .login-footer {
+      padding: 0 28px 24px;
+      text-align: center;
+    }
+
+    .login-footer-text {
+      font-size: var(--font-xs);
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-wrapper">
+    <div class="card">
+
+      <!-- Header with gradient -->
+      <div class="login-header">
+        <div class="login-logo">
+          <div class="login-logo-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <span class="login-logo-text">KOREA AIRPORTS CORPORATION</span>
+        </div>
+        <div class="login-title-area">
+          <h1 class="login-title">명함발주시스템</h1>
+          <p class="login-subtitle">KOREA AIRPORTS CORPORATION</p>
+        </div>
+      </div>
+
+      <!-- Login form -->
+      <div class="login-body">
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label for="employee_id" class="form-label">사번</label>
+            <input type="text" id="employee_id" name="employee_id" class="form-input"
+                   placeholder="사번을 입력하세요" autocomplete="username" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">비밀번호</label>
+            <input type="password" id="password" name="password" class="form-input"
+                   placeholder="비밀번호를 입력하세요" autocomplete="current-password" required>
+          </div>
+
+          <div class="login-error" id="loginError">
+            사번 또는 비밀번호가 올바르지 않습니다.
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-login" id="btnLogin">
+            로그인
+          </button>
+        </form>
+      </div>
+
+      <!-- Card footer -->
+      <div class="login-footer">
+        <p class="login-footer-text">&copy; 2026 한국공항공사. All rights reserved.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/common.js"></script>
+  <script src="js/app-login.js"></script>
+
+</body>
+</html>

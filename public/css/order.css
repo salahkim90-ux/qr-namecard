@@ -1,0 +1,832 @@
+/* ============================================================
+   order.css — Namecard Order Page Styles
+   Depends on common.css for variables and base styles
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. PAGE LAYOUT
+   ------------------------------------------------------------ */
+.order-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+  padding-top: var(--space-md);
+}
+
+
+/* ------------------------------------------------------------
+   2. TAB BAR (개인주문 | 단체주문)
+   ------------------------------------------------------------ */
+.order-tabs {
+  display: flex;
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: var(--space-lg);
+  border: 1.5px solid var(--border);
+}
+
+.order-tab {
+  flex: 1;
+  padding: 14px 20px;
+  font-size: var(--font-md);
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  transition: all var(--transition-base);
+  position: relative;
+}
+
+.order-tab:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: var(--border);
+}
+
+.order-tab:hover {
+  background: var(--accent-glow);
+  color: var(--primary);
+}
+
+.order-tab.active {
+  background: var(--gradient-button);
+  color: var(--text-inverse);
+}
+
+.order-tab.active::after {
+  display: none;
+}
+
+/* Hide adjacent separator when active */
+.order-tab.active + .order-tab::after {
+  display: none;
+}
+
+
+/* ------------------------------------------------------------
+   3. TWO-COLUMN FORM LAYOUT (Korean / English)
+   ------------------------------------------------------------ */
+.order-form-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.order-form-column {
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.column-header {
+  background: var(--bg);
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.column-header-title {
+  font-size: var(--font-md);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.column-header-subtitle {
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.column-body {
+  padding: 24px;
+}
+
+
+/* ------------------------------------------------------------
+   4. FORM SECTION HEADERS
+   ------------------------------------------------------------ */
+.form-section {
+  margin-bottom: var(--space-lg);
+}
+
+.form-section:last-child {
+  margin-bottom: 0;
+}
+
+.form-section-header {
+  font-size: var(--font-base);
+  font-weight: 700;
+  color: var(--primary);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-md);
+  border-bottom: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.form-section-header .icon {
+  width: 20px;
+  height: 20px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+
+/* ------------------------------------------------------------
+   5. FIELD GROUP STYLING
+   ------------------------------------------------------------ */
+.field-group {
+  margin-bottom: var(--space-md);
+}
+
+.field-group:last-child {
+  margin-bottom: 0;
+}
+
+.field-group .form-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.field-group .form-label .field-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent-glow);
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Inline field with label on the left */
+.field-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.field-inline .form-label {
+  flex-shrink: 0;
+  min-width: 80px;
+  margin-bottom: 0;
+}
+
+.field-inline .form-input,
+.field-inline .form-select {
+  flex: 1;
+}
+
+/* Lookup field with button */
+.field-lookup {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.field-lookup .form-input {
+  flex: 1;
+}
+
+.field-lookup .btn {
+  flex-shrink: 0;
+  padding: 10px 14px;
+}
+
+
+/* ------------------------------------------------------------
+   6. BRANCH CHECKBOX CONDITIONAL AREA
+   ------------------------------------------------------------ */
+.branch-select-area {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.branch-select-area.hidden {
+  display: none;
+}
+
+.branch-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.branch-toggle .form-label {
+  margin-bottom: 0;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.branch-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-lg);
+}
+
+
+/* ------------------------------------------------------------
+   7. CANVAS PREVIEW AREA
+   ------------------------------------------------------------ */
+.preview-area {
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  margin-top: var(--space-lg);
+}
+
+.preview-header {
+  background: var(--bg);
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.preview-header-title {
+  font-size: var(--font-md);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.preview-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.preview-canvas-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.preview-canvas-label {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.preview-canvas-wrapper canvas {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  max-width: 100%;
+  height: auto;
+}
+
+/* Stacked 3-canvas layout */
+.preview-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+  width: 100%;
+}
+
+
+/* ------------------------------------------------------------
+   8. ACTION BUTTON ROW (지우기, 미리보기, 발주)
+   ------------------------------------------------------------ */
+.action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-lg) 0;
+  margin-top: var(--space-lg);
+  border-top: 1px solid var(--border);
+}
+
+.action-bar .btn {
+  min-width: 120px;
+}
+
+/* Specific action button variants */
+.btn-clear {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+}
+
+.btn-clear:hover {
+  border-color: var(--text-secondary);
+  color: var(--text);
+  background: var(--bg);
+}
+
+.btn-preview {
+  background: transparent;
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+}
+
+.btn-preview:hover {
+  background: rgba(11, 61, 107, 0.06);
+}
+
+.btn-order {
+  background: var(--gradient-button);
+  color: var(--text-inverse);
+  box-shadow: 0 4px 15px rgba(11, 61, 107, 0.3);
+  min-width: 140px;
+  font-size: var(--font-md);
+}
+
+.btn-order:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(11, 61, 107, 0.4);
+}
+
+.btn-order:active {
+  transform: translateY(0);
+}
+
+
+/* ------------------------------------------------------------
+   9. QUANTITY & REASON CONDITIONAL FIELD
+   ------------------------------------------------------------ */
+.quantity-section {
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  margin-top: var(--space-lg);
+}
+
+.quantity-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-md);
+}
+
+.quantity-row .field-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.quantity-input {
+  max-width: 160px;
+}
+
+/* Reason field appears conditionally when quantity is unusual */
+.reason-field {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px dashed var(--border);
+}
+
+.reason-field.hidden {
+  display: none;
+}
+
+.reason-field .form-label {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+
+/* ------------------------------------------------------------
+   10. PRICE DISPLAY AREA
+   ------------------------------------------------------------ */
+.price-display {
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+  margin-top: var(--space-md);
+  border: 1px solid var(--border);
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) 0;
+}
+
+.price-row:not(:last-child) {
+  border-bottom: 1px solid var(--border);
+}
+
+.price-label {
+  font-size: var(--font-base);
+  color: var(--text-secondary);
+}
+
+.price-value {
+  font-size: var(--font-base);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.price-row.total {
+  padding-top: var(--space-md);
+  margin-top: var(--space-sm);
+  border-top: 2px solid var(--primary);
+  border-bottom: none;
+}
+
+.price-row.total .price-label {
+  font-size: var(--font-md);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.price-row.total .price-value {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+
+/* ------------------------------------------------------------
+   11. ORDER STATUS / INFO BAR
+   ------------------------------------------------------------ */
+.order-info-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--accent-glow);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+  border-left: 4px solid var(--accent);
+}
+
+.order-info-bar .info-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.order-info-bar .info-text {
+  font-size: var(--font-base);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+
+/* ------------------------------------------------------------
+   12. RESPONSIVE
+   ------------------------------------------------------------ */
+@media (max-width: 900px) {
+  .order-form-columns {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .order-page {
+    padding: var(--space-md);
+  }
+}
+
+@media (max-width: 600px) {
+  .order-tabs {
+    border-radius: var(--radius-md);
+  }
+
+  .order-tab {
+    padding: 12px 14px;
+    font-size: var(--font-base);
+  }
+
+  .column-body {
+    padding: var(--space-md);
+  }
+
+  .preview-body {
+    padding: var(--space-md);
+  }
+
+  .action-bar {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .action-bar .btn {
+    width: 100%;
+  }
+
+  .quantity-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .quantity-input {
+    max-width: 100%;
+  }
+
+  .field-inline {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-xs);
+  }
+
+  .field-inline .form-label {
+    min-width: auto;
+  }
+}
+
+
+/* ============================================================
+   13. HTML CLASS MAPPINGS
+   Styles for classes used in order.html
+   ============================================================ */
+
+/* --- Tab group & tab buttons --- */
+.tab-group {
+  display: flex;
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: var(--space-lg);
+  border: 1.5px solid var(--border);
+}
+
+.tab {
+  flex: 1;
+  padding: 14px 20px;
+  font-size: var(--font-md);
+  font-weight: 600;
+  font-family: 'Noto Sans KR', sans-serif;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  transition: all var(--transition-base);
+  position: relative;
+}
+
+.tab:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: var(--border);
+}
+
+.tab:hover {
+  background: var(--accent-glow);
+  color: var(--primary);
+}
+
+.tab.active {
+  background: var(--gradient-button);
+  color: var(--text-inverse);
+}
+
+.tab.active::after {
+  display: none;
+}
+
+.tab.active + .tab::after {
+  display: none;
+}
+
+/* --- Tab panels --- */
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+/* --- Two-column form layout (Korean / English) --- */
+.form-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.form-column {
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  padding: 24px;
+  border: none;
+}
+
+.column-title {
+  font-size: var(--font-md);
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--accent);
+}
+
+/* --- Form row with top section (Type & Quantity) --- */
+.form-row--top {
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-lg);
+}
+
+.form-row--top > .form-group {
+  flex: 1;
+  min-width: 180px;
+}
+
+.form-group--reason {
+  flex: 2 !important;
+}
+
+/* --- Form group with button --- */
+.form-group--with-btn .input-with-btn {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.form-group--with-btn .input-with-btn .form-control {
+  flex: 1;
+}
+
+.btn-search {
+  flex-shrink: 0;
+  padding: 10px 14px;
+  font-size: var(--font-sm);
+}
+
+/* --- Checkbox form group --- */
+.form-group--checkbox {
+  margin-top: var(--space-sm);
+}
+
+/* --- Order summary (price & confirm) --- */
+.order-summary {
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-lg) var(--space-xl);
+  margin-top: var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.order-price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+
+.order-price .price-label {
+  font-size: var(--font-md);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.order-price .price-value {
+  font-size: var(--font-2xl);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.order-confirm {
+  display: flex;
+  align-items: center;
+}
+
+/* --- Action buttons row --- */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-lg) 0;
+  margin-top: var(--space-lg);
+}
+
+.action-buttons .btn {
+  min-width: 120px;
+}
+
+/* --- Preview area with canvas --- */
+.preview-area {
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  margin-top: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+.preview-title {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.preview-card {
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.preview-card:last-child {
+  margin-bottom: 0;
+}
+
+.preview-label {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: var(--space-sm);
+}
+
+.preview-card canvas {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  max-width: 100%;
+  height: auto;
+}
+
+
+/* --- Responsive for new classes --- */
+@media (max-width: 900px) {
+  .form-columns {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+}
+
+@media (max-width: 600px) {
+  .tab-group {
+    border-radius: var(--radius-md);
+  }
+
+  .tab {
+    padding: 12px 14px;
+    font-size: var(--font-base);
+  }
+
+  .form-row--top {
+    flex-direction: column;
+  }
+
+  .form-row--top > .form-group {
+    min-width: 100%;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .action-buttons .btn {
+    width: 100%;
+  }
+
+  .order-summary {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .order-price {
+    justify-content: center;
+  }
+}

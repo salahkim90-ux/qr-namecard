@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>명함발주시스템 - 마이페이지</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/common.css">
+  <style>
+    /* ============================================================
+       MyPage-specific styles (header, layout, table, badges)
+       ============================================================ */
+
+    /* --- Header (matches order.html structure) --- */
+    .header {
+      background: var(--gradient-primary);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 12px rgba(11, 61, 107, 0.25);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      padding: 0 var(--space-lg);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      color: var(--text-inverse);
+      text-decoration: none;
+      font-size: var(--font-lg);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .header-logo .logo-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-inverse);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .header-user {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: var(--font-sm);
+      font-weight: 500;
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    .header-link {
+      color: rgba(255, 255, 255, 0.8);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-sm);
+      font-size: var(--font-sm);
+      font-weight: 500;
+      transition: all var(--transition-base);
+      text-decoration: none;
+    }
+
+    .header-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .header-link.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .btn-logout {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    /* --- Main content area --- */
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--space-md) var(--space-lg) var(--space-2xl);
+    }
+
+    /* --- Breadcrumb (matches order.html) --- */
+    .breadcrumb ol {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      list-style: none;
+      padding: var(--space-md) 0;
+      font-size: var(--font-sm);
+      color: var(--text-secondary);
+    }
+
+    .breadcrumb ol li + li::before {
+      content: '>';
+      margin-right: var(--space-sm);
+      color: var(--border);
+    }
+
+    .breadcrumb ol li a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb ol li a:hover {
+      color: var(--primary);
+    }
+
+    .breadcrumb ol li:last-child span {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* --- Page title --- */
+    .page-title {
+      font-size: var(--font-xl);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: var(--space-lg);
+    }
+
+    /* --- Orders table card --- */
+    .orders-card {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .orders-card .table th {
+      text-align: center;
+    }
+
+    .orders-card .table td {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .orders-card .table td.text-left {
+      text-align: left;
+    }
+
+    /* --- Status badges --- */
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      font-size: var(--font-xs);
+      font-weight: 600;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-pending {
+      background: rgba(90, 107, 124, 0.1);
+      color: var(--text-secondary);
+    }
+
+    .badge-confirmed {
+      background: var(--accent-glow);
+      color: var(--primary);
+    }
+
+    .badge-printing {
+      background: rgba(245, 124, 0, 0.1);
+      color: var(--warning);
+    }
+
+    .badge-completed {
+      background: rgba(46, 125, 50, 0.1);
+      color: var(--success);
+    }
+
+    .badge-cancelled {
+      background: rgba(198, 40, 40, 0.1);
+      color: var(--danger);
+    }
+
+    /* --- Empty state --- */
+    .empty-state {
+      padding: var(--space-2xl) var(--space-lg);
+      text-align: center;
+    }
+
+    .empty-state-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto var(--space-md);
+      color: var(--text-muted);
+      opacity: 0.4;
+    }
+
+    .empty-state-title {
+      font-size: var(--font-md);
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .empty-state-desc {
+      font-size: var(--font-sm);
+      color: var(--text-muted);
+    }
+
+    .empty-state-action {
+      margin-top: var(--space-lg);
+    }
+
+    /* --- Footer (matches order.html) --- */
+    .footer {
+      text-align: center;
+      padding: var(--space-lg) var(--space-md);
+      margin-top: var(--space-2xl);
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-text {
+      font-size: var(--font-xs);
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+      .header-inner {
+        height: 48px;
+      }
+
+      .header-logo {
+        font-size: var(--font-md);
+      }
+
+      .header-right {
+        gap: 0;
+      }
+
+      .header-user,
+      .header-link {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--font-xs);
+      }
+
+      .orders-card {
+        border-radius: var(--radius-lg);
+      }
+
+      .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .table-responsive .table {
+        min-width: 640px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="/" class="header-logo">
+          <span class="logo-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </span>
+          <span class="logo-text">명함발주시스템</span>
+        </a>
+      </div>
+      <nav class="header-right">
+        <span class="header-user" id="headerUser"></span>
+        <a href="/order.html" class="header-link">명함주문</a>
+        <a href="/mypage.html" class="header-link active">마이페이지</a>
+        <button type="button" class="header-link btn-logout" id="btnLogout">로그아웃</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Main Content ===== -->
+  <main class="main-content">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="현재 위치">
+      <ol>
+        <li><a href="/">홈</a></li>
+        <li aria-current="page"><span>마이페이지</span></li>
+      </ol>
+    </nav>
+
+    <!-- Page Title -->
+    <h1 class="page-title">주문내역</h1>
+
+    <!-- Orders Table -->
+    <div class="orders-card">
+      <div class="table-responsive">
+        <table class="table" id="ordersTable">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>주문일시</th>
+              <th>명함유형</th>
+              <th>이름</th>
+              <th>수량</th>
+              <th>금액</th>
+              <th>상태</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody">
+            <!-- Rendered by app-mypage.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty state (shown when no orders) -->
+      <div class="empty-state d-none" id="emptyState">
+        <div class="empty-state-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <p class="empty-state-title">주문내역이 없습니다</p>
+        <p class="empty-state-desc">명함을 주문하시면 이곳에서 주문 현황을 확인하실 수 있습니다.</p>
+        <div class="empty-state-action">
+          <a href="/order.html" class="btn btn-primary">명함 주문하기</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-text">&copy; 2026 명함발주시스템. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/common.js"></script>
+  <script src="js/app-mypage.js"></script>
+
+</body>
+</html>

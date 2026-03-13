@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>생성기 URL QR</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+</head>
+<body style="text-align:center; padding:40px; font-family:sans-serif;">
+<h2>김해공항 QR 명함 생성기 바로가기</h2>
+<p style="color:#666;">https://kac-gimhae.github.io/qr-namecard/</p>
+<canvas id="qr"></canvas>
+<br/><br/>
+<button onclick="download()" style="padding:12px 32px; font-size:1rem; background:#0B3D6B; color:#fff; border:none; border-radius:8px; cursor:pointer;">이미지 다운로드</button>
+<script>
+QRCode.toCanvas(document.getElementById('qr'), 'https://kac-gimhae.github.io/qr-namecard/', {
+  errorCorrectionLevel: 'M',
+  width: 400,
+  margin: 2,
+  color: { dark: '#0B3D6B', light: '#FFFFFF' }
+});
+function download() {
+  var a = document.createElement('a');
+  a.download = 'QR_생성기_바로가기.png';
+  a.href = document.getElementById('qr').toDataURL('image/png');
+  a.click();
+}
+</script>
+</body>
+</html>

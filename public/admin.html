@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>명함발주시스템 - 관리자</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/common.css">
+  <style>
+    /* ── Admin Page Layout ── */
+    .admin-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: var(--space-lg);
+      padding-top: var(--space-md);
+    }
+
+    /* ── Admin Badge ── */
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      font-size: var(--font-xs);
+      font-weight: 600;
+      border-radius: 12px;
+      background: rgba(198, 40, 40, 0.12);
+      color: var(--danger);
+      margin-left: var(--space-xs);
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Add Department Card ── */
+    .admin-card {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      margin-bottom: var(--space-lg);
+    }
+
+    .admin-card-header {
+      background: var(--bg);
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .admin-card-header-title {
+      font-size: var(--font-md);
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .admin-card-body {
+      padding: 24px;
+    }
+
+    /* ── Add Department Form ── */
+    .add-dept-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--space-md);
+      align-items: end;
+    }
+
+    .add-dept-form .form-group {
+      margin-bottom: 0;
+    }
+
+    .add-dept-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Department Table ── */
+    .dept-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--font-base);
+    }
+
+    .dept-table th,
+    .dept-table td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .dept-table th {
+      font-size: var(--font-sm);
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg);
+      white-space: nowrap;
+    }
+
+    .dept-table tbody tr:hover {
+      background: var(--accent-glow);
+    }
+
+    .dept-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .dept-table .col-id { width: 60px; text-align: center; }
+    .dept-table .col-action { width: 80px; text-align: center; }
+
+    .dept-table .btn-delete {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      padding: 4px 12px;
+      font-size: var(--font-sm);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 500;
+      transition: all var(--transition-base);
+    }
+
+    .dept-table .btn-delete:hover {
+      background: var(--danger);
+      color: var(--text-inverse);
+    }
+
+    /* ── Empty State ── */
+    .dept-empty {
+      text-align: center;
+      padding: var(--space-2xl) var(--space-lg);
+      color: var(--text-muted);
+      font-size: var(--font-md);
+    }
+
+    /* ── Table Wrapper (overflow) ── */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .admin-page {
+        padding: var(--space-md);
+      }
+
+      .admin-card-body {
+        padding: var(--space-md);
+      }
+
+      .add-dept-form {
+        grid-template-columns: 1fr;
+      }
+
+      .dept-table {
+        font-size: var(--font-sm);
+      }
+
+      .dept-table th,
+      .dept-table td {
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="/" class="header-logo">
+          <span class="logo-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </span>
+          <span class="logo-text">명함발주시스템</span>
+        </a>
+      </div>
+      <nav class="header-right">
+        <span class="header-user" id="headerUser">관리자님</span>
+        <span class="admin-badge">관리자</span>
+        <a href="/order.html" class="header-link">명함주문</a>
+        <a href="/mypage.html" class="header-link">마이페이지</a>
+        <button type="button" class="header-link btn-logout" id="btnLogout">로그아웃</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Main Content ===== -->
+  <main class="main-content admin-page">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="현재 위치">
+      <ol>
+        <li><a href="/">홈</a></li>
+        <li><span>관리자</span></li>
+        <li aria-current="page"><span>부서관리</span></li>
+      </ol>
+    </nav>
+
+    <!-- Page Title -->
+    <h1 class="page-title">부서 데이터 관리</h1>
+
+    <!-- ============================================ -->
+    <!-- Add Department Form                          -->
+    <!-- ============================================ -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent);">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+        <span class="admin-card-header-title">부서 추가</span>
+      </div>
+      <div class="admin-card-body">
+        <div class="add-dept-form" id="addDeptForm">
+          <div class="form-group">
+            <label for="addDept" class="form-label">부서명 <span class="text-danger">*</span></label>
+            <input type="text" id="addDept" class="form-input" placeholder="부서명 입력">
+          </div>
+          <div class="form-group">
+            <label for="addDeptEn" class="form-label">부서명 (영문)</label>
+            <input type="text" id="addDeptEn" class="form-input" placeholder="Department name">
+          </div>
+          <div class="form-group">
+            <label for="addTeam" class="form-label">팀명</label>
+            <input type="text" id="addTeam" class="form-input" placeholder="팀명 입력">
+          </div>
+          <div class="form-group">
+            <label for="addAddr" class="form-label">주소</label>
+            <input type="text" id="addAddr" class="form-input" placeholder="주소 입력">
+          </div>
+          <div class="form-group">
+            <label for="addAddrEn" class="form-label">주소 (영문)</label>
+            <input type="text" id="addAddrEn" class="form-input" placeholder="Address in English">
+          </div>
+          <div class="form-group">
+            <label for="addBranch" class="form-label">공항/지사명</label>
+            <input type="text" id="addBranch" class="form-input" placeholder="공항/지사명 입력">
+          </div>
+          <div class="form-group">
+            <label for="addBranchEn" class="form-label">공항/지사명 (영문)</label>
+            <input type="text" id="addBranchEn" class="form-input" placeholder="Branch name">
+          </div>
+        </div>
+        <div class="add-dept-actions">
+          <button type="button" class="btn btn-primary" id="btnAddDept">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            추가
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- Department List                              -->
+    <!-- ============================================ -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent);">
+          <path d="M3 12h18M3 6h18M3 18h18"/>
+        </svg>
+        <span class="admin-card-header-title">부서 목록</span>
+        <span class="badge badge-primary" id="deptCount" style="margin-left: auto;">0건</span>
+      </div>
+      <div class="admin-card-body" style="padding: 0;">
+        <div class="table-wrap">
+          <table class="dept-table">
+            <thead>
+              <tr>
+                <th class="col-id">ID</th>
+                <th>부서</th>
+                <th>부서 (영문)</th>
+                <th>팀</th>
+                <th>주소</th>
+                <th>공항/지사</th>
+                <th class="col-action">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="deptBody">
+              <!-- Rendered by app-admin.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State -->
+        <div class="dept-empty d-none" id="deptEmpty">
+          등록된 부서가 없습니다. 위 폼에서 부서를 추가해주세요.
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-text">&copy; 2026 명함발주시스템. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ===== Toast ===== -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== Scripts ===== -->
+  <script src="js/common.js"></script>
+  <script src="js/app-admin.js"></script>
+
+</body>
+</html>

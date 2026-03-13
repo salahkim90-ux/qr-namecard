@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Database
+server/db/*.sqlite
+server/db/*.sqlite-wal
+server/db/*.sqlite-shm
+
+# Uploads
+uploads/excel/*
+uploads/zip/*
+uploads/photos/*
+!uploads/**/.gitkeep
+
+# Output
+output/
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+# Deployment
+deploy/
+deploy2/
+
+# Archive
+*.zip
+
+# Design source files
+*.ai

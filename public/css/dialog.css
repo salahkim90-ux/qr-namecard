@@ -1,0 +1,296 @@
+/* ============================================================
+   dialog.css — Native <dialog> Element Styles
+   Depends on common.css for variables and base styles
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. NATIVE <dialog> ELEMENT BASE
+   ------------------------------------------------------------ */
+dialog.dialog {
+  background: var(--card);
+  border-radius: var(--radius-xl);
+  border: none;
+  width: 100%;
+  max-width: 500px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 16px 40px rgba(11, 61, 107, 0.15),
+    0 30px 80px rgba(11, 61, 107, 0.08);
+}
+
+/* Backdrop (native <dialog> ::backdrop) */
+dialog.dialog::backdrop {
+  background: rgba(26, 43, 60, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+
+/* ------------------------------------------------------------
+   2. DIALOG HEADER
+   ------------------------------------------------------------ */
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.dialog-title {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.3px;
+  margin: 0;
+}
+
+.dialog-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.dialog-close:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.dialog-close:active {
+  background: var(--border);
+}
+
+
+/* ------------------------------------------------------------
+   3. DIALOG BODY
+   ------------------------------------------------------------ */
+.dialog-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Custom scrollbar inside dialog */
+.dialog-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dialog-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dialog-body::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.dialog-body::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Help text */
+.dialog-help {
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+  line-height: 1.5;
+}
+
+
+/* ------------------------------------------------------------
+   4. SEARCH INPUT + SEARCH BUTTON ROW
+   ------------------------------------------------------------ */
+.dialog-search {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.dialog-search .form-control {
+  flex: 1;
+}
+
+.dialog-search .btn {
+  flex-shrink: 0;
+  padding: 10px 18px;
+}
+
+
+/* ------------------------------------------------------------
+   5. RESULTS TABLE (dialog-table)
+   ------------------------------------------------------------ */
+.dialog-results {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.dialog-results::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dialog-results::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dialog-results::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.dialog-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-base);
+}
+
+.dialog-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.dialog-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg);
+  border-bottom: 1.5px solid var(--border);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.dialog-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.dialog-table tbody tr {
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.dialog-table tbody tr:hover {
+  background: var(--accent-glow);
+}
+
+.dialog-table tbody tr:active {
+  background: rgba(0, 168, 232, 0.12);
+}
+
+.dialog-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Selected row */
+.dialog-table tbody tr.selected {
+  background: var(--accent-glow);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.dialog-table tbody tr.selected td {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Empty state inside results */
+.results-empty {
+  text-align: center;
+  padding: var(--space-xl) var(--space-md);
+  color: var(--text-muted);
+  font-size: var(--font-base);
+}
+
+
+/* ------------------------------------------------------------
+   6. DIALOG FOOTER (Apply / Cancel button row)
+   ------------------------------------------------------------ */
+.dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  background: var(--bg);
+}
+
+.dialog-footer .btn {
+  min-width: 90px;
+}
+
+.dialog-footer .btn:disabled {
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+
+
+/* ------------------------------------------------------------
+   7. TITLE SELECTION TABLE
+   ------------------------------------------------------------ */
+/* Korean + English title columns */
+.dialog-table .col-kr {
+  font-weight: 500;
+}
+
+.dialog-table .col-en {
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+}
+
+
+/* ------------------------------------------------------------
+   8. RESPONSIVE
+   ------------------------------------------------------------ */
+@media (max-width: 520px) {
+  dialog.dialog {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    margin: auto auto 0;
+  }
+
+  .dialog-header {
+    padding: 16px 20px;
+  }
+
+  .dialog-body {
+    padding: 16px 20px;
+  }
+
+  .dialog-footer {
+    padding: 14px 20px;
+  }
+
+  .dialog-footer .btn {
+    flex: 1;
+  }
+
+  .dialog-table th,
+  .dialog-table td {
+    padding: 8px 10px;
+    font-size: var(--font-sm);
+  }
+}

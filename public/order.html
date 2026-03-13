@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>명함발주시스템 - 명함주문</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/order.css">
+  <link rel="stylesheet" href="css/dialog.css">
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="/" class="header-logo">
+          <span class="logo-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </span>
+          <span class="logo-text">명함발주시스템</span>
+        </a>
+      </div>
+      <nav class="header-right">
+        <span class="header-user" id="headerUser">홍길동님</span>
+        <a href="/mypage.html" class="header-link">마이페이지</a>
+        <a href="/cart.html" class="header-link">장바구니</a>
+        <button type="button" class="header-link btn-logout" id="btnLogout">로그아웃</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Main Content ===== -->
+  <main class="main-content">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="현재 위치">
+      <ol>
+        <li><a href="/">홈</a></li>
+        <li><span>명함</span></li>
+        <li aria-current="page"><span>명함주문</span></li>
+      </ol>
+    </nav>
+
+    <!-- Page Title -->
+    <h1 class="page-title">명함주문</h1>
+
+    <!-- Tabs: Individual / Bulk -->
+    <div class="tab-group" role="tablist" aria-label="주문 유형 선택">
+      <button type="button" class="tab active" id="tabIndividual"
+              role="tab" aria-selected="true" aria-controls="panelIndividual"
+              data-tab="individual">개인주문</button>
+      <button type="button" class="tab" id="tabBulk"
+              role="tab" aria-selected="false" aria-controls="panelBulk"
+              data-tab="bulk">단체주문</button>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- Individual Order Panel                       -->
+    <!-- ============================================ -->
+    <section class="tab-panel active" id="panelIndividual" role="tabpanel" aria-labelledby="tabIndividual">
+      <form id="formIndividual" novalidate>
+
+        <!-- Top row: Type & Quantity -->
+        <div class="form-row form-row--top">
+          <div class="form-group">
+            <label for="nc_type" class="form-label required">명함 유형</label>
+            <select id="nc_type" name="nc_type" class="form-control" required>
+              <option value="">-- 유형 선택 --</option>
+              <option value="01">01형</option>
+              <option value="02">02형</option>
+              <option value="03">03청렴형</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="nc_qty" class="form-label required">수량</label>
+            <select id="nc_qty" name="nc_qty" class="form-control" required>
+              <option value="1">1갑 (200매)</option>
+              <option value="2">2갑 (400매)</option>
+              <option value="3">3갑 (600매)</option>
+            </select>
+          </div>
+          <div class="form-group form-group--reason" id="qtyReasonGroup" style="display:none;">
+            <label for="nc_qty_reason" class="form-label">추가 수량 사유</label>
+            <input type="text" id="nc_qty_reason" name="nc_qty_reason" class="form-control"
+                   placeholder="추가 수량 사유를 입력하세요">
+          </div>
+        </div>
+
+        <!-- Two-column layout: Korean (left) + English (right) -->
+        <div class="form-columns">
+
+          <!-- Left column: Korean Info -->
+          <fieldset class="form-column">
+            <legend class="column-title">한글 정보</legend>
+
+            <div class="form-group">
+              <label for="nc_name" class="form-label required">이름</label>
+              <input type="text" id="nc_name" name="nc_name" class="form-control"
+                     placeholder="홍길동" required>
+            </div>
+
+            <div class="form-group form-group--with-btn">
+              <label for="nc_dept" class="form-label required">부서</label>
+              <div class="input-with-btn">
+                <input type="text" id="nc_dept" name="nc_dept" class="form-control"
+                       placeholder="부서명" required readonly>
+                <button type="button" class="btn btn-search" id="btnDeptSearch"
+                        aria-label="부서 검색">부서검색</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="nc_team" class="form-label">팀</label>
+              <input type="text" id="nc_team" name="nc_team" class="form-control"
+                     placeholder="부서 검색 시 자동입력" readonly>
+            </div>
+
+            <div class="form-group form-group--with-btn">
+              <label for="nc_title" class="form-label required">직책</label>
+              <div class="input-with-btn">
+                <input type="text" id="nc_title" name="nc_title" class="form-control"
+                       placeholder="직책" required readonly>
+                <button type="button" class="btn btn-search" id="btnTitleSelect"
+                        aria-label="직책 선택">직책선택</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="nc_addr" class="form-label required">주소</label>
+              <input type="text" id="nc_addr" name="nc_addr" class="form-control"
+                     placeholder="부서 검색 시 자동입력" required readonly>
+            </div>
+
+            <div class="form-group">
+              <label for="nc_phone" class="form-label required">전화번호</label>
+              <input type="text" id="nc_phone" name="nc_phone" class="form-control"
+                     placeholder="예) 0220001234" required>
+            </div>
+
+            <div class="form-group">
+              <label for="nc_fax" class="form-label required">팩스</label>
+              <input type="text" id="nc_fax" name="nc_fax" class="form-control"
+                     placeholder="예) 0220005678" required>
+            </div>
+
+            <div class="form-group">
+              <label for="nc_mobile" class="form-label required">휴대폰</label>
+              <input type="text" id="nc_mobile" name="nc_mobile" class="form-control"
+                     placeholder="예) 01012345678" required>
+            </div>
+
+            <div class="form-group">
+              <label for="nc_email" class="form-label required">이메일</label>
+              <input type="email" id="nc_email" name="nc_email" class="form-control"
+                     placeholder="예) hong@company.com" required>
+            </div>
+
+            <div class="form-group form-group--checkbox">
+              <label class="checkbox-label">
+                <input type="checkbox" id="nc_branch_ck" name="nc_branch_ck">
+                <span>지사 표기</span>
+              </label>
+            </div>
+
+            <div class="form-group" id="branchGroup" style="display:none;">
+              <label for="nc_branch" class="form-label">지사명</label>
+              <input type="text" id="nc_branch" name="nc_branch" class="form-control"
+                     placeholder="지사명 입력">
+            </div>
+          </fieldset>
+
+          <!-- Right column: English Info -->
+          <fieldset class="form-column">
+            <legend class="column-title">영문 정보</legend>
+
+            <div class="form-group">
+              <label for="nc_name_en" class="form-label required">이름 (English)</label>
+              <input type="text" id="nc_name_en" name="nc_name_en" class="form-control"
+                     placeholder="Gildong HONG" required>
+            </div>
+
+            <div class="form-group">
+              <label for="nc_dept_en" class="form-label required">부서 (English)</label>
+              <input type="text" id="nc_dept_en" name="nc_dept_en" class="form-control"
+                     placeholder="부서 검색 시 자동입력" required readonly>
+            </div>
+
+            <div class="form-group">
+              <label for="nc_title_en" class="form-label required">직책 (English)</label>
+              <input type="text" id="nc_title_en" name="nc_title_en" class="form-control"
+                     placeholder="직책 선택 시 자동입력" required readonly>
+            </div>
+
+            <div class="form-group">
+              <label for="nc_addr_en" class="form-label required">주소 (English)</label>
+              <input type="text" id="nc_addr_en" name="nc_addr_en" class="form-control"
+                     placeholder="부서 검색 시 자동입력" required readonly>
+            </div>
+
+            <div class="form-group" id="branchEnGroup" style="display:none;">
+              <label for="nc_branch_en" class="form-label">지사명 (English)</label>
+              <input type="text" id="nc_branch_en" name="nc_branch_en" class="form-control"
+                     placeholder="Branch name in English">
+            </div>
+
+            <div class="form-group">
+              <label for="nc_info" class="form-label">기타 추가사항</label>
+              <textarea id="nc_info" name="nc_info" class="form-control form-textarea"
+                        rows="4" placeholder="추가로 기재할 사항이 있으면 입력하세요"></textarea>
+            </div>
+          </fieldset>
+
+        </div><!-- /.form-columns -->
+
+      </form>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- Bulk Order Panel                             -->
+    <!-- ============================================ -->
+    <section class="tab-panel" id="panelBulk" role="tabpanel" aria-labelledby="tabBulk" hidden>
+      <form id="formBulk" novalidate>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nc_qty_bulk" class="form-label required">수량 (총 매수)</label>
+            <input type="number" id="nc_qty_bulk" name="nc_qty_bulk" class="form-control"
+                   min="1" placeholder="엑셀 파일 내 인원수 합계" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nc_excel_file" class="form-label required">엑셀 파일</label>
+            <input type="file" id="nc_excel_file" name="nc_excel_file" class="form-control form-file"
+                   accept=".xls,.xlsx" required>
+            <p class="form-help">허용 형식: .xls, .xlsx</p>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nc_zip_file" class="form-label">사진 파일 (zip)</label>
+            <input type="file" id="nc_zip_file" name="nc_zip_file" class="form-control form-file"
+                   accept=".zip">
+            <p class="form-help">이름_부서.jpg 형태의 사진 파일들을 zip으로 압축하여 업로드하세요.</p>
+          </div>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- Price & Confirmation                         -->
+    <!-- ============================================ -->
+    <section class="order-summary">
+      <div class="order-price">
+        <span class="price-label">주문금액:</span>
+        <span class="price-value" id="priceDisplay">&#8361;20,900</span>
+      </div>
+
+      <div class="order-confirm">
+        <label class="checkbox-label">
+          <input type="checkbox" id="confirmCheck" name="confirmCheck">
+          <span>입력한 모든 항목에 이상이 없음을 확인합니다.</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- Action Buttons                               -->
+    <!-- ============================================ -->
+    <section class="action-buttons">
+      <button type="button" class="btn btn-secondary" id="btnClear">지우기</button>
+      <button type="button" class="btn btn-secondary" id="btnPreview">미리보기</button>
+      <button type="button" class="btn btn-primary" id="btnOrder">발주</button>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- Canvas Preview Area                          -->
+    <!-- ============================================ -->
+    <section class="preview-area" id="previewArea" style="display:none;" aria-label="명함 미리보기">
+      <h2 class="preview-title">명함 미리보기</h2>
+
+      <div class="preview-card" id="previewCard01">
+        <h3 class="preview-label">01형</h3>
+        <canvas id="canvas01" width="1010" height="278">
+          브라우저가 Canvas를 지원하지 않습니다.
+        </canvas>
+      </div>
+
+      <div class="preview-card" id="previewCard02">
+        <h3 class="preview-label">02형</h3>
+        <canvas id="canvas02" width="1010" height="278">
+          브라우저가 Canvas를 지원하지 않습니다.
+        </canvas>
+      </div>
+
+      <div class="preview-card" id="previewCard03">
+        <h3 class="preview-label">03형 (청렴형)</h3>
+        <canvas id="canvas03" width="1010" height="278">
+          브라우저가 Canvas를 지원하지 않습니다.
+        </canvas>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-text">&copy; 2026 명함발주시스템. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ===== Dialogs ===== -->
+
+  <!-- Department Search Dialog -->
+  <dialog class="dialog" id="dialogDeptSearch" aria-labelledby="dialogDeptSearchTitle">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="dialogDeptSearchTitle">부서 검색</h2>
+      <button type="button" class="dialog-close" id="btnDeptSearchClose" aria-label="닫기">&times;</button>
+    </div>
+    <div class="dialog-body">
+      <p class="dialog-help">부서명 또는 팀명에 포함되는 단어를 입력하세요. 예) 기획, 전략, 인사...</p>
+      <div class="dialog-search">
+        <input type="text" id="deptSearchKeyword" class="form-control"
+               placeholder="검색어 입력">
+        <button type="button" class="btn btn-primary" id="btnDeptSearchExec">검색</button>
+      </div>
+      <div class="dialog-results">
+        <table class="dialog-table" id="deptSearchResults">
+          <thead>
+            <tr>
+              <th>부서</th>
+              <th>팀</th>
+              <th>주소</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Search results rendered by dept-search.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="btn btn-secondary" id="btnDeptSearchCancel">취소</button>
+      <button type="button" class="btn btn-primary" id="btnDeptSearchApply" disabled>적용</button>
+    </div>
+  </dialog>
+
+  <!-- Title Select Dialog -->
+  <dialog class="dialog" id="dialogTitleSelect" aria-labelledby="dialogTitleSelectTitle">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="dialogTitleSelectTitle">직책 선택</h2>
+      <button type="button" class="dialog-close" id="btnTitleSelectClose" aria-label="닫기">&times;</button>
+    </div>
+    <div class="dialog-body">
+      <table class="dialog-table" id="titleSelectTable">
+        <thead>
+          <tr>
+            <th>직위</th>
+            <th>영어 명칭</th>
+            <th>비고</th>
+            <th>선택</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Title list rendered by title-select.js -->
+        </tbody>
+      </table>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="btn btn-secondary" id="btnTitleSelectCancel">취소</button>
+    </div>
+  </dialog>
+
+  <!-- ===== Toast ===== -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== Scripts ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/price-calc.js"></script>
+  <script src="js/form-validation.js"></script>
+  <script src="js/dept-search.js"></script>
+  <script src="js/title-select.js"></script>
+  <script src="js/canvas-preview.js"></script>
+  <script src="js/app-order.js"></script>
+
+</body>
+</html>
